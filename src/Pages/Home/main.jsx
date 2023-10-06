@@ -5,7 +5,6 @@ import { toast } from "react-toastify"
 const Main = () => {
   const [newTile, setNewTile] = useState(false)
   const [workouts, setWorkouts] = useState([])
-
   const AddTile = () => {
     // now we show the blank tile
     setNewTile(true)
@@ -13,32 +12,43 @@ const Main = () => {
     window.dispatchEvent(new Event("storage"))
   }
   window.addEventListener("storage", () => {
-    if (localStorage.getItem("Adding") === "false" || localStorage.getItem("Adding") ==='done') {
+    if (
+      localStorage.getItem("Adding") === "false" ||
+      localStorage.getItem("Adding") === "done"
+    ) {
       setNewTile(false)
     }
   })
   useEffect(() => {
     GetAllWorkouts()
-    .then((res) => {
-      setWorkouts(res)
-    })
-    .catch((error) => {
-      toast.error(error.message)
-    })
-  }, [newTile,workouts])
+      .then((res) => {
+        console.log("trigger")
+        setWorkouts(res)
+      })
+      .catch((error) => {
+        toast.error(error.message)
+      })
+  }, [workouts, newTile])
   return (
     <div
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent:"center",
-        width:"80vw",
-        margin:"auto"
+        justifyContent: "center",
+        width: "80vw",
+        margin: "auto",
       }}
     >
-      { workouts.length && workouts.map((res, key) => {
+      {workouts.length &&
+        workouts.map((res, key) => {
           return (
-            <Tile Reps={res.reps} Load={res.load} Title={res.title} key={key}  id={res._id}/>
+            <Tile
+              Reps={res.reps}
+              Load={res.load}
+              Title={res.title}
+              key={key}
+              id={res._id}
+            />
           )
         })}
       <div
